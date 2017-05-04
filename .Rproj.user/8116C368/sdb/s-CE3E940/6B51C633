@@ -1,10 +1,10 @@
 {
-    "contents" : "#########################\n# Házi feladat 4        #\n# Programozás I.        #\n# 2016/17. II. félév    #\n# Mogyorósi Pálma       #\n# 2017.05.01.           #\n#########################\n\n",
+    "contents" : "#########################\n# Házi feladat 4        #\n# Programozás I.        #\n# 2016/17. II. félév    #\n# Mogyorósi Pálma       #\n# 2017.05.01.           #\n#########################\n\n#---------------------------II.01 feladat---------------------------\n# A data mappában találsz egy clinton_trump_tweets.csv nevű fájlt. \n# Ezt hívd be tweets néven. Az eredeti adatfájl innen származik, és \n# Hillary Clinton, valamint Donald Trump 6444 tweetjét tartalmazza 2016. \n# januártól szeptemberig. Ez az adatsor bővítve lett pár új oszloppal. \n# Az új oszlopok a tweetek szövegeinek különbözőképp feldolgozott verzióit \n# tartalmazza, valamint a szövegek legjellemzőbb szentimentjét és emócióját.\n\ntweets <- read.csv2(\"data/clinton_trump_tweets.csv\", stringsAsFactors = F)\n\nView(tweets)\n\n\n#---------------------------II.02 feladat---------------------------\n# Kérd le, hány tweet származik Hillary Clintontól és hány Donald Trumptól! \n# Ezt ábrázold is a fig/sample/tweet1.png alapján, majd mentsd ki a plotot \n# a fig mappába tweet1.png néven!\n\nlibrary(reshape2)\n\nlibrary(ggplot2)\n\nggplot(tweets, aes(x = handle, fill = handle)) + \n  geom_bar() +\n  ggtitle(\"Candidate Tweets\") +\n  xlab(\"\") + ylab(\"Tweet frequency\") +\n  scale_fill_manual(values = c(\"blue\", \"red\"),\n                    labels = c(\"Hillary Clinton\", \"Donald Trump\"),\n                    name = \"Candidate\") +\n  theme(plot.title = element_text(hjust = 0.5),\n        panel.background = element_blank(),\n        axis.text.x = element_blank(),\n        axis.ticks.x = element_blank())\n\nggsave(\"fig/tweet1.png\")",
     "created" : 1493932717412.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2243692670",
+    "hash" : "183056377",
     "id" : "6B51C633",
     "lastKnownWriteTime" : 1493932766,
     "path" : "D:/ELTE Survey/2. félév/Programozás I/homework-04/src/homework-04.R",
