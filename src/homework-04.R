@@ -202,3 +202,143 @@ ggplot(hiphopcand, aes(x = Var2, y = Freq, fill = Var1)) +
                    breaks = c(1990, 1995, 2000, 2005, 2010, 2015))
 
 ggsave("fig/hiphop1.png")
+
+##### a második ábrát nem készítettem el ##### 
+
+#---------------------------III.02 feladat---------------------------
+# Készíts egy általad értelmesnek tartott ábrát a datasetben található változókat 
+# felhasználva! Mentsd ki az ábrát a fig mappába hiphop3.png néven!
+
+# a jelöltek említése témánként
+
+hiphopcand2 <- table(hiphop_cand_lyrics$candidate, 
+                     hiphop_cand_lyrics$theme)
+
+hiphopcand2 <- as.data.frame(hiphopcand2)
+
+summary(hiphopcand2$Var2)
+
+ggplot(hiphopcand2, aes(x = Var2, y = Freq, fill = Var1)) + 
+  geom_bar(stat = "identity", position = "stack") +
+  ggtitle("Candidates mentioned by themes in hip-hop songs") +
+  xlab("Themes") + ylab("Frequency") +
+  scale_fill_manual(values = c("#fec075", "#94d7fa", "#ff8974", "#ffd92f", "#fccde5",
+                               "#66c2a5", "#a6d854", "#e78ac3"),
+                    labels = c("TRUMP", "CLINTON", "BUSH", "CHRISTIE",
+                               "HUCKABEE", "SANDERS", "CARSON", "CRUZ"),
+                    name = "Candidates") +
+  scale_x_discrete(labels = c("Hotel", "Money", "Personal", "Political",
+                              "Power", "Sexual", "The Apprentice")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.background = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave("fig/hiphop3.png")
+
+#---------------------------IV.01 feladat---------------------------
+# A clinton_trump_tweets.csv tartalmaz egy text_sentiment és egy text_emotion 
+# változót. (...)
+# Hasonlítsd össze Hillary Clinton és Donald Trump tweetjeinek szentimentjeit 
+# és emócióit. Vizsgáld meg oszlopdiagrammal és idősoros ábrával az eltéréseket. 
+# Nézd meg, hogy statisztikailag szignifikáns-e a különbség a két jelölt 
+# szentimentjeinek ill. emócióinak száma között.
+
+# barchartok
+
+ggplot(tweets, aes(x = handle, fill = text_sentiment)) +
+  geom_bar(stat = "count", position = "fill") +
+  ggtitle("Candidates' sentiments") +
+  xlab("") + ylab("") +
+  scale_x_discrete(labels = c("Hillary Clinton", "Donald Trump")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.ticks.x = element_blank())
+
+ggplot(tweets, aes(x = handle, fill = text_emotion)) +
+  geom_bar(stat = "count", position = "fill") +
+  ggtitle("Candidates' emotions") +
+  xlab("") + ylab("") +
+  scale_x_discrete(labels = c("Hillary Clinton", "Donald Trump")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.ticks.x = element_blank())
+
+# chi négyzet próbával szignifikáns eltérés vizsgálata
+
+chisq.test(x = tweets$handle, tweets$text_sentiment)
+
+chisq.test(x = tweets$handle, tweets$text_emotion)
+
+# mindkét teszt szerint van szignifikáns különbség
+
+##### az idősoros ábrát nem csináltam meg ##### 
+
+
+#---------------------------IV.02 feladat---------------------------
+# Többen feltételezték, hogy Trump tweetjeit (legalább) két különböző ember írja, 
+# az androidosokat feltételezhetően Trump, az iphone-osokat pedig valaki más 
+# (a mi adatainkban a source_url oszlop tartalmaz erre vonatkozó információkat). 
+# Ennek a feltételezésnek a bizonyítására készült egy tök jó szövegelemzés: 
+# http://varianceexplained.org/r/trump-tweets/. A szerző itt is összehasonlítja 
+# a tweetek szentimentjét (bár más kategóriarendszert használva). 
+# Vizsgáld meg vizuálisan, hogy a mi adatunk szerint is különböznek-e a 
+# két forrásból származó tweetek szentimentjei ill. emóciói. Nézd meg, 
+# hogy statisztikailag szignifikáns-e a különbség.
+
+# dataframe szűrése
+
+tweets_source <- subset.data.frame(tweets, tweets$handle == "realDonaldTrump"
+                                   & tweets$source_url != "NA",
+                                   c(source_url, text_sentiment, text_emotion))
+
+# iphone/android oszlop létrehozása, feltöltése
+
+tweets_source["sources"] <- NA
+
+tweets_source$sources[tweets_source$source_url == 
+                        "http://twitter.com/download/iphone"] <- "iphone"
+
+tweets_source$sources[tweets_source$source_url == 
+                        "http://twitter.com/download/android"] <- "android"
+
+# chi négyzet próbával szignifikáns eltérés vizsgálata
+
+chisq.test(x = tweets_source$sources, tweets_source$text_sentiment)
+
+chisq.test(x = tweets_source$sources, tweets_source$text_emotion)
+
+# mindkét teszt szerint van szignifikáns különbség
+
+# barchartok
+# valamiért lett NA oszlop is, pedig a tweets_source NA mentes,
+# sajnos nem jöttem rá, miért
+
+ggplot(tweets_source, aes(x = sources, fill = text_emotion)) +
+  geom_bar(stat = "count", position = "fill") +
+  ggtitle("Text emotions by sources") +
+  xlab("") + ylab("") +  
+  scale_fill_manual(values = c("#d11141", "#daa520", "#00b159", "#ffc425",
+                               "#00aedb", "#f37735", "#CCCCCC"),
+                    labels = c("Anger", "Disgust", "Fear", "Joy", 
+                               "Sadness", "Surprise", "Unknown"),
+                    name = "Emotions") +
+  scale_x_discrete(labels = c("Android", "Iphone")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.background = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot(tweets_source, aes(x = sources, fill = text_sentiment)) +
+  geom_bar(stat = "count", position = "fill") +
+  ggtitle("Text sentiments by sources") +
+  xlab("") + ylab("") +  
+  scale_fill_manual(values = c("#ff6f69", "#CCCCCC", "#96ceb4"),
+                    labels = c("Negative", "Neutral", "Positive"),
+                    name = "Sentiments") +
+  scale_x_discrete(labels = c("Android", "Iphone")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.background = element_blank(),
+        axis.ticks.x = element_blank())
+
+
+#---------------------------IV.03 feladat---------------------------
+
+##### nincs kész #####
+
