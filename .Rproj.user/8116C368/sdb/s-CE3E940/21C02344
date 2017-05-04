@@ -1,0 +1,18 @@
+{
+    "contents" : "# History files\n.Rhistory\n.Rapp.history\n\n# Session Data files\n.RData\n\n# Example code in package build process\n*-Ex.R\n\n# Output files from R CMD build\n/*.tar.gz\n\n# Output files from R CMD check\n/*.Rcheck/\n  \n  # RStudio files\n  .Rproj.user/\n  \n  # produced vignettes\n  vignettes/*.html\nvignettes/*.pdf\n\n# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3\n.httr-oauth\n\n# knitr and R markdown default cache directories\n/*_cache/\n  /cache/\n  \n  # Temporary files created by R markdown\n  *.utf8.md\n*.knit.md",
+    "created" : 1493937072443.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3916641022",
+    "id" : "21C02344",
+    "lastKnownWriteTime" : 1493937103,
+    "path" : "D:/ELTE Survey/2. félév/Programozás I/homework-04/.gitignore",
+    "project_path" : ".gitignore",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "gitignore"
+}
